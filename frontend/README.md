@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Web Application for Audio Transcription, Summarization, and Text-to-Speech
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
 
-## Available Scripts
+This web application allows users to upload audio files, transcribe them, summarize the transcriptions and convert summaries to speech.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Upload Audio File**: Users can upload audio files for processing.
+- **Transcribe Audio**: Converts audio content into text.
+- **Summarize Transcription**: Summarizes the textual content from transcriptions.
+- **Text-to-Speech**: Converts text summaries into audible speech.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technology Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend**: React
+- **Backend**: Node.js, Express.js
+- **APIs**: OpenAI API
+- **File Upload Handling**: `express-fileupload`
+- **Path Management**: `path` module
+- **Database**: SQLite for lightweight storage
+- **Asynchronous Handling**: `async`/await
 
-### `npm test`
+## Decisions and Rationale
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Technology Choices
 
-### `npm run build`
+- **React for Frontend**: Facilitates dynamic and responsive UI development.
+- **Node.js and Express for Backend**: Provides a scalable and performant environment.
+- **OpenAI API**: Ensures high-quality transcription, summarization, and text-to-speech.
+- **SQLite**: Chosen for its simplicity and ease of use for lightweight data storage.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Implementation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### File Upload Handling
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Used `express-fileupload` for efficient file management.
+- Users can upload audio files which are then stored in a designated directory for processing.
 
-### `npm run eject`
+### File Upload for Transcription
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- The user uploads a file, which is then moved to the server's upload directory.
+- The file path is used to transcribe the audio using the OpenAI API.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Asynchronous Processing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Employed `async`/await for non-blocking operations, ensuring smooth and efficient handling of requests.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### API Calls
 
-## Learn More
+- Handled in the backend to keep the frontend clean and focused on the user interface.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Caching
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Implemented a basic caching mechanism using SQLite to store frequently accessed data, reducing the number of API calls.
+- Plans to upgrade to a proper caching solution like Redis for enhanced performance.
 
-### Code Splitting
+### Saving Request and Response
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Requests and responses are saved to the SQLite database for logging, tracking, and potential reuse.
+- Plans to extend this to all endpoints
 
-### Analyzing the Bundle Size
+### API Key Validation
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- API keys are set and checked in the backend to ensure secure access to the services.
 
-### Making a Progressive Web App
+### Return ArrayBuffer for Text-to-Speech
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- The generated speech is returned as an ArrayBuffer, enabling efficient handling of binary audio data.
 
-### Advanced Configuration
+### Modular Architecture
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Frontend components are modularized for better maintainability and reusability.
+- Backend is organized into modular folders: routes, services, and repositories, enhancing code organization and separation of concerns.
 
-### Deployment
+## Potential Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Subtitles Implementation
 
-### `npm run build` fails to minify
+- **Current State**: None
+- **Approach**: Use Web Speech API to generate real-time subtitles. Synchronize the transcription output with the audio playback to display subtitles accurately.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Styling
+
+- **Current State**: None
+- **Improvements**: Implement a more sophisticated design using CSS frameworks like Tailwind CSS or styled-components for React.
+
+### Caching
+
+- **Current State**: Basic caching using SQLite.
+- **Improvements**: Implement Redis for better performance and scalability.
+
+### Logging
+
+- **Current State**: Logging request/response implemented for summarize endpoints.
+- **Improvements**: Extend logging to all endpoints to capture detailed logs for all operations, aiding in debugging and monitoring.
+
+### API Abstraction
+
+- **Current State**: API calls are directly made in the components.
+- **Improvements**: Create a dedicated API file to manage backend calls, improving code organization and maintainability.
+
+### Testing
+
+- **Approach**: None
+- **Benefits**: Implement unit and integration tests using Jest and React Testing Library for frontend, and Mocha/Chai for backend.
